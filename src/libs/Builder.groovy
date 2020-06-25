@@ -23,7 +23,6 @@ def prepare(name = "sample") {
 
     this.archiva = ""
     this.chartmuseum = ""
-    this.harbor = ""
     this.jenkins = ""
     this.nexus = ""
     this.registry = ""
@@ -76,7 +75,6 @@ def load_variables() {
     if (val.role == "devops") {
         this.archiva = val.archiva
         this.chartmuseum = val.chartmuseum
-        this.harbor = val.harbor
         this.jenkins = val.jenkins
         this.nexus = val.nexus
         this.registry = val.registry
@@ -314,10 +312,6 @@ def build_chart(path = "") {
             sh "helm push . chartmuseum"
         }
 
-        // if (harbor) {
-        //     // TODO username, password
-        //     sh "helm push --username admin --password password . harbor"
-        // }
     }
 
     sh """
@@ -345,13 +339,6 @@ def build_image() {
         """
     }
 
-    // if (harbor) {
-    //     sh """
-    //         echo 'password' | docker login ${harbor} -u admin --password-stdin
-    //         docker tag ${name}:${version} ${harbor}/library/${name}:${version}
-    //         docker push ${harbor}/library/${name}:${version}
-    //     """
-    // }
 }
 
 def helm_init() {
@@ -363,9 +350,6 @@ def helm_init() {
         sh "helm repo add chartmuseum https://${chartmuseum}"
     }
 
-    // if (harbor) {
-    //     sh "helm repo add harbor https://${harbor}/chartrepo/library"
-    // }
 
     sh """
         helm repo list
